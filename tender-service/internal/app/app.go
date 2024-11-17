@@ -25,7 +25,7 @@ func Run(cf *config.Config) {
 	db := repo.NewStorage(pgm.DB)
 
 	// Set up gRPC server
-	lis, err := net.Listen("tcp", cf.GRPCPort)
+	lis, err := net.Listen("tcp", "tender-service:50050")
 	if err != nil {
 		log.Fatal("Failed to listen: ", err)
 	}
@@ -35,7 +35,7 @@ func Run(cf *config.Config) {
 	pb.RegisterBidServiceServer(server, service.NewBidService(db))
 	pb.RegisterTenderServiceServer(server, service.NewTenderService(db))
 
-	log.Println("Server started on port " + cf.GRPCPort)
+	log.Println("Server started on port " + "tender-service:50050")
 	if err = server.Serve(lis); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}

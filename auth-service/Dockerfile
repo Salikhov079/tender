@@ -11,7 +11,6 @@ WORKDIR /app
 COPY --from=builder /app/myapp .
 COPY --from=builder /app/config/model.conf ./config/
 COPY --from=builder /app/config/policy.csv ./config/
-COPY ./email/verification_email.html /app/email/
 
 COPY .env .
 EXPOSE 8888
