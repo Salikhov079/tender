@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+option go_package = "genprotos/";
+
+package users;
+
+service UserService {
+    rpc Register(User) returns (User) {}
+    rpc Login(UserLogin) returns (User) {}
+    rpc Update(User) returns (User) {}
+    rpc Delete(ById) returns (User) {}
+    rpc GetById(ById) returns (User) {}
+    rpc GetAll(UserFilter) returns (AllUsers) {}
+}
+
+message ById {
+    string id = 1;
+}
+
+message User {
+    string id = 1;
+    string username = 2;
+    string password = 3;
+    string role = 4;
+    string email = 5;
+}
+
+message UserReq {
+    string username = 1;
+    string password = 2;
+    string role = 3;
+    string email = 4;
+}
+
+message UserFilter {
+    int32 limit = 1;
+    int32 offset = 2;
+    string username = 3;
+    string email = 4;
+    string role = 5;
+}
+
+message UserLogin {
+    string username = 1;
+    string password = 2;
+}
+
+message UserLoginRes {
+    string id = 1;
+    string username = 2;
+    string role = 3;
+    string email = 4;
+}
+
+message AllUsers {
+    repeated User users = 1;
+    int32 count = 2;
+}

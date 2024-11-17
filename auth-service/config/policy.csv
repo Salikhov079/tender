@@ -1,0 +1,16 @@
+p, unauthorized, /swagger/*any, GET
+p, unauthorized, /login, POST
+p, unauthorized, /register, POST
+
+p, client, /user/get_profil, GET
+p, client, /user/update_profil, PUT
+p, client, /user/delete_profil, DELETE
+p, client, /user/refresh-token, GET
+g, client, contractor
+
+g, admin, client
+p, admin, /register, POST
+p, admin, /user/getall, GET
+p, admin, /user/getbyid/:id, GET
+p, admin, /user/update/:id, PUT
+p, admin, /user/delete/:id, DELETE
