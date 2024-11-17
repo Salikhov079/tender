@@ -5,8 +5,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"github.com/dilshodforever/tender/internal/http/handlers"
 	_ "github.com/dilshodforever/tender/internal/http/docs"
+	"github.com/dilshodforever/tender/internal/http/handlers"
 
 	files "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -33,6 +33,8 @@ func NewGin(h *handlers.HTTPHandler) *gin.Engine {
 		panic(err)
 	}
 
+	// r.Use(middleware.NewAuth(ca))
+
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -45,36 +47,36 @@ func NewGin(h *handlers.HTTPHandler) *gin.Engine {
 	url := ginSwagger.URL("/swagger/doc.json") // Adjusted path for Swagger docs
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(files.Handler, url))
 
+	rt := r.Group("/api")
 	// Tender Endpoints
-tender := r.Group("/tenders")
-{
-    tender.POST("/", h.CreateTender)
-    tender.POST("/:id/award/:bid_id", h.TenderAward)
-    tender.DELETE("/:id", h.DeleteTender)
-    tender.GET("/", h.ListTenders)
-    tender.PUT("/:id", h.UpdateTender)
-}
+	tender := rt.Group("/client/tenders")
+	{
+		tender.POST("", h.CreateTender)
+		tender.POST("/:id/award/:bid_id", h.TenderAward)
+		tender.DELETE("/:id", h.DeleteTender)
+		tender.GET("", h.ListTenders)
+		tender.PUT("/:id", h.UpdateTender)
+	}
 
-// User Tender Endpoints
-user := r.Group("/users")
-{
-    user.GET("/:id/tenders", h.ListUserTenders)
-    user.GET("/:id/bids", h.ListContractorBids)
-}
+	// User Tender Endpoints
+	user := rt.Group("/users")
+	{
+		user.GET("/:id/tenders", h.ListUserTenders)
+		user.GET("/:id/bids", h.ListContractorBids)
+	}
 
-// Tender Bid Endpoints
-bids := r.Group("/tenders/:id/bids")
-{
-    bids.POST("/", h.SubmitBid)
-    bids.GET("/", h.GetAllBidsByTenderId)
-}
+	// Tender Bid Endpoints
+	bids := rt.Group("/tenders/:id/bids")
+	{
+		bids.POST("", h.SubmitBid)
+		bids.GET("", h.GetAllBidsByTenderId)
+	}
 
-// General Bid Endpoints
-bid := r.Group("/bid")
-{
-    bid.GET("/list", h.ListBids)
-}
-
+	// General Bid Endpoints
+	bid := rt.Group("/bid")
+	{
+		bid.GET("/list", h.ListBids)
+	}
 
 	return r
 }

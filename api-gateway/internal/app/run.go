@@ -15,14 +15,14 @@ import (
 )
 
 func Run(cf config.Config) {
-	TenderConn, err := grpc.NewClient("localhost:50050", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	TenderConn, err := grpc.NewClient("tender-service:50050", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal("Error while connecting to TenderService: ", err.Error())
 	}
 	defer TenderConn.Close()
 	// Redis connection
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: "redis:6379",
 	})
 	
 	// // MinIO connection

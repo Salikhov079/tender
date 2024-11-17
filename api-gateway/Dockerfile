@@ -9,6 +9,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o myapp .
 FROM alpine:latest
 WORKDIR /app
 COPY --from=builder /app/myapp .
+COPY --from=builder /app/internal/pkg/config/model.conf ./internal/pkg/config/
+COPY --from=builder /app/internal/pkg/config/policy.csv ./internal/pkg/config/
 
 COPY .env .
 EXPOSE 8000

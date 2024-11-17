@@ -25,7 +25,7 @@ import (
 // @Success      200 {object} pb.BidResponse "Bid submitted successfully"
 // @Failure      400 {string} string "Invalid input"
 // @Failure      500 {string} string "Error while submitting bid"
-// @Router       /tenders/{id}/bids [post]
+// @Router       /api/client/tenders/{id}/bids [post]
 func (h *HTTPHandler) SubmitBid(ctx *gin.Context) {
 	middleware.RateLimitMiddleware(h.Redis)
 	var req pb.SubmitBidRequest
@@ -61,7 +61,7 @@ func (h *HTTPHandler) SubmitBid(ctx *gin.Context) {
 // @Success      200 {object} pb.ListBidsResponse "Bids retrieved successfully"
 // @Failure      400 {string} string "Invalid input"
 // @Failure      500 {string} string "Error while retrieving bids"
-// @Router       /bid/list [get]
+// @Router       /api/client/bid/list [get]
 func (h *HTTPHandler) ListBids(ctx *gin.Context) {
 	// Parsing query parameters
 	price, err := strconv.ParseFloat(ctx.DefaultQuery("price", "0"), 64)
@@ -171,7 +171,7 @@ func (h *HTTPHandler) ListBids(ctx *gin.Context) {
 // @Success      200 {object} pb.ListBidsResponse "Bids retrieved successfully"
 // @Failure      400 {string} string "Invalid input"
 // @Failure      500 {string} string "Error while retrieving bids"
-// @Router       /tenders/{id}/bids [get]
+// @Router       /api/client/tenders/{id}/bids [get]
 func (h *HTTPHandler) GetAllBidsByTenderId(ctx *gin.Context) {
 	id := ctx.Param("id")
 	// Calling the service to get all bids by tender ID
@@ -195,7 +195,7 @@ func (h *HTTPHandler) GetAllBidsByTenderId(ctx *gin.Context) {
 // @Success      200 {object} pb.GetAllBidsByUserIdRequest "Contractor's bids retrieved successfully"
 // @Failure      400 {string} string "Invalid input"
 // @Failure      500 {string} string "Error while retrieving bids"
-// @Router       /users/{id}/bids [get]
+// @Router       /api/client/users/{id}/bids [get]
 func (h *HTTPHandler) ListContractorBids(ctx *gin.Context) {
 	id := ctx.Param("id")
 

@@ -8,7 +8,7 @@
     },
     "basePath": "/",
     "paths": {
-        "/bid/list": {
+        "/api/client/bid/list": {
             "get": {
                 "security": [
                     {
@@ -74,7 +74,7 @@
                 }
             }
         },
-        "/tenders": {
+        "/api/client/tenders": {
             "get": {
                 "description": "List tenders with optional filtering by title and deadline",
                 "consumes": [
@@ -173,7 +173,7 @@
                 }
             }
         },
-        "/tenders/{id}": {
+        "/api/client/tenders/{id}": {
             "put": {
                 "description": "Update an existing tender with the provided details",
                 "consumes": [
@@ -280,7 +280,7 @@
                 }
             }
         },
-        "/tenders/{id}/award/{bid_id}": {
+        "/api/client/tenders/{id}/award/{bid_id}": {
             "post": {
                 "description": "Award a tender to a specific bid",
                 "consumes": [
@@ -337,7 +337,7 @@
                 }
             }
         },
-        "/tenders/{id}/bids": {
+        "/api/client/tenders/{id}/bids": {
             "get": {
                 "security": [
                     {
@@ -442,7 +442,7 @@
                 }
             }
         },
-        "/users/{id}/bids": {
+        "/api/client/users/{id}/bids": {
             "get": {
                 "security": [
                     {
@@ -491,7 +491,7 @@
                 }
             }
         },
-        "/users/{id}/tenders": {
+        "/api/client/users/{id}/tenders": {
             "get": {
                 "description": "List all tenders created by a specific user",
                 "consumes": [

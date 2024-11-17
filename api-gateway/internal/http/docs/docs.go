@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/bid/list": {
+        "/api/client/bid/list": {
             "get": {
                 "security": [
                     {
@@ -81,7 +81,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tenders": {
+        "/api/client/tenders": {
             "get": {
                 "description": "List tenders with optional filtering by title and deadline",
                 "consumes": [
@@ -180,7 +180,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tenders/{id}": {
+        "/api/client/tenders/{id}": {
             "put": {
                 "description": "Update an existing tender with the provided details",
                 "consumes": [
@@ -287,7 +287,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tenders/{id}/award/{bid_id}": {
+        "/api/client/tenders/{id}/award/{bid_id}": {
             "post": {
                 "description": "Award a tender to a specific bid",
                 "consumes": [
@@ -344,7 +344,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tenders/{id}/bids": {
+        "/api/client/tenders/{id}/bids": {
             "get": {
                 "security": [
                     {
@@ -449,7 +449,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}/bids": {
+        "/api/client/users/{id}/bids": {
             "get": {
                 "security": [
                     {
@@ -498,7 +498,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}/tenders": {
+        "/api/client/users/{id}/tenders": {
             "get": {
                 "description": "List all tenders created by a specific user",
                 "consumes": [

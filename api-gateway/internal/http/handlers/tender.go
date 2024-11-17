@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
+	"github.com/dilshodforever/tender/internal/http/middleware"
 	pb "github.com/dilshodforever/tender/internal/pkg/genprotos"
 
 	"github.com/gin-gonic/gin"
@@ -19,21 +21,26 @@ import (
 // @Success 200 {object} pb.TenderResponse "Tender created successfully"
 // @Failure 400 {object} string "Bad request"
 // @Failure 500 {object} string "Server error"
-// @Router /tenders [POST]
+// @Router /api/client/tenders [POST]
 func (h *HTTPHandler) CreateTender(c *gin.Context) {
 	var req pb.CreateTenderRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		fmt.Println(err)
 		return
 	}
-
+	
+	req.ClientId = middleware.GetUserId(c)
+	fmt.Println(req.ClientId)
+   
 	resp, err := h.TenderService.CreateTender(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusCreated, resp)
 }
 
 // TenderAward godoc
@@ -48,14 +55,15 @@ func (h *HTTPHandler) CreateTender(c *gin.Context) {
 // @Failure 400 {object} string "Bad request"
 // @Failure 404 {object} string "Tender or bid not found"
 // @Failure 500 {object} string "Server error"
-// @Router /tenders/{id}/award/{bid_id} [POST]
+// @Router /api/client/tenders/{id}/award/{bid_id} [POST]
 func (h *HTTPHandler) TenderAward(c *gin.Context) {
 	var req pb.CreatTenderAwardRequest
-	req.TenderId=c.Param("id")
-	req.BidId=c.Param("bid_id")
+	req.TenderId = c.Param("id")
+	req.BidId = c.Param("bid_id")
 	resp, err := h.TenderService.TenderAward(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
 		return
 	}
 
@@ -73,13 +81,14 @@ func (h *HTTPHandler) TenderAward(c *gin.Context) {
 // @Failure 400 {object} string "Bad request"
 // @Failure 404 {object} string "Tender not found"
 // @Failure 500 {object} string "Server error"
-// @Router /tenders/{id} [DELETE]
+// @Router /api/client/tenders/{id} [DELETE]
 func (h *HTTPHandler) DeleteTender(c *gin.Context) {
 	tenderID := c.Param("id")
 
 	resp, err := h.TenderService.DeleteTender(c, &pb.TenderIdRequest{Id: tenderID})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
 		return
 	}
 
@@ -98,7 +107,7 @@ func (h *HTTPHandler) DeleteTender(c *gin.Context) {
 // @Param offset query int false "Starting position of items to retrieve"
 // @Success 200 {object} pb.ListTendersResponse "List of tenders"
 // @Failure 500 {object} string "Server error"
-// @Router /tenders [GET]
+// @Router /api/client/tenders [GET]
 func (h *HTTPHandler) ListTenders(c *gin.Context) {
 	title := c.Query("title")
 	deadline := c.Query("deadline")
@@ -106,12 +115,14 @@ func (h *HTTPHandler) ListTenders(c *gin.Context) {
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid limit parameter"})
+		fmt.Println(err)
 		return
 	}
 
 	offset, err := strconv.Atoi(c.DefaultQuery("offset", "0"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid offset parameter"})
+		fmt.Println(err)
 		return
 	}
 
@@ -127,6 +138,7 @@ func (h *HTTPHandler) ListTenders(c *gin.Context) {
 	resp, err := h.TenderService.ListTenders(c, req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
 		return
 	}
 
@@ -145,17 +157,19 @@ func (h *HTTPHandler) ListTenders(c *gin.Context) {
 // @Failure 400 {object} string "Bad request"
 // @Failure 404 {object} string "Tender not found"
 // @Failure 500 {object} string "Server error"
-// @Router /tenders/{id} [PUT]
+// @Router /api/client/tenders/{id} [PUT]
 func (h *HTTPHandler) UpdateTender(c *gin.Context) {
 	var req pb.UpdateTenderRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		fmt.Println(err)
 		return
 	}
-	req.Id=c.Param("id")
+	req.Id = c.Param("id")
 	resp, err := h.TenderService.UpdateTender(c, &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
 		return
 	}
 
@@ -171,12 +185,13 @@ func (h *HTTPHandler) UpdateTender(c *gin.Context) {
 // @Param id path string true "User ID"
 // @Success 200 {object} pb.ListTendersResponse "List of user tenders"
 // @Failure 500 {object} string "Server error"
-// @Router /users/{id}/tenders [GET]
+// @Router /api/client/users/{id}/tenders [GET]
 func (h *HTTPHandler) ListUserTenders(c *gin.Context) {
 	userID := c.Param("id")
 	resp, err := h.TenderService.ListUserTenders(c, &pb.TenderIdRequest{Id: userID})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		fmt.Println(err)
 		return
 	}
 

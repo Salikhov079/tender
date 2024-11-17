@@ -135,7 +135,7 @@ info:
   title: API Gateway
   version: "1.0"
 paths:
-  /bid/list:
+  /api/client/bid/list:
     get:
       consumes:
       - application/json
@@ -178,7 +178,7 @@ paths:
       summary: List Bids
       tags:
       - Bid
-  /tenders:
+  /api/client/tenders:
     get:
       consumes:
       - application/json
@@ -243,7 +243,7 @@ paths:
       summary: Create a new tender
       tags:
       - 04-Tender
-  /tenders/{id}:
+  /api/client/tenders/{id}:
     delete:
       consumes:
       - application/json
@@ -314,7 +314,7 @@ paths:
       summary: Update a tender
       tags:
       - 04-Tender
-  /tenders/{id}/award/{bid_id}:
+  /api/client/tenders/{id}/award/{bid_id}:
     post:
       consumes:
       - application/json
@@ -352,7 +352,7 @@ paths:
       summary: Award a tender
       tags:
       - Tender
-  /tenders/{id}/bids:
+  /api/client/tenders/{id}/bids:
     get:
       consumes:
       - application/json
@@ -419,7 +419,7 @@ paths:
       summary: Submit Bid
       tags:
       - Bid
-  /users/{id}/bids:
+  /api/client/users/{id}/bids:
     get:
       consumes:
       - application/json
@@ -450,7 +450,7 @@ paths:
       summary: List Contractor Bids
       tags:
       - Bid
-  /users/{id}/tenders:
+  /api/client/users/{id}/tenders:
     get:
       consumes:
       - application/json

@@ -89,6 +89,7 @@ func (a *JwtRoleAuth) CheckPermission(r *gin.Context) (bool, error) {
 
 func GetUserId(r *gin.Context) string {
 	jwtToken := r.Request.Header.Get("Authorization")
+	fmt.Println(jwtToken)
 
 	claims, err := token.ExtractClaim(jwtToken)
 	if err != nil {
