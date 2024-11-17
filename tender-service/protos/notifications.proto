@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option go_package = "genprotos/";
+
+package protos;
+
+service NotificationService {
+    rpc CreateNotification (CreateNotificationRequest) returns (NotificationResponse);
+}
+
+message CreateNotificationRequest {
+    string user_id = 1;
+    string message = 2;
+    string relation_id = 3; // Related entity (e.g., tender_id, bid_id)
+    string type = 4; // "tender", "bid", etc.
+}
+
+
+
+message NotificationResponse {
+   string message =1;
+}
+

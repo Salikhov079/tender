@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option go_package = "genprotos/";
+
+package protos;
+
+import "tender.proto";
+service BidService {
+    rpc SubmitBid (SubmitBidRequest) returns (BidResponse);
+    rpc ListBids (ListBidsRequest) returns (ListBidsResponse);
+    rpc GetAllBidsByTenderId(GetAllByid) returns (ListBidsResponse);
+    rpc ListContractorBids(GetAllByid) returns (GetAllBidsByUserIdRequest);
+}
+
+message SubmitBidRequest {
+    string tender_id = 1;
+    string contractor_id = 2;
+    float price = 3;
+    int32 delivery_time = 4; // in days
+    string comments = 5; // Optional
+}
+
+message BidResponse{
+    string message =1;
+}
+
+message GetAllByid{
+    string id =1;
+}
+message GetAllBidResponse {
+    string tender_id = 1;
+    float price = 2;
+    int32 delivery_time = 3; // in days
+    string comments = 4;
+    string status = 5; // "pending", "awarded"
+    string created_at = 6;
+    GetTenderResponse Tenders =7;
+    string id =8;
+}
+
+message ListBidsRequest {
+    float price =1;
+    int32 delivery_time = 2;
+    int32 limit = 3;
+    int32 offset = 4;
+}
+
+message ListBidsResponse {
+    repeated GetAllBidResponse bids = 1;
+}
+
+message GetAllBidsByUser{
+    string contractor_id = 1;
+    float price = 2;
+    int32 delivery_time = 3; 
+    string comments = 4;
+    GetTenderResponse Tenders =5;
+}
+
+
+message GetAllBidsByUserIdRequest {
+    repeated GetAllBidsByUser Bids =1;
+}

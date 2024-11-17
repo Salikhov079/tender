@@ -1,0 +1,474 @@
+basePath: /
+definitions:
+  genprotos.BidResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  genprotos.CreatTenderAwardRequest:
+    properties:
+      bid_id:
+        type: string
+      tender_id:
+        type: string
+    type: object
+  genprotos.CreateTenderRequest:
+    properties:
+      budget:
+        type: number
+      deadline:
+        type: string
+      description:
+        type: string
+      file_url:
+        type: string
+      title:
+        type: string
+    type: object
+  genprotos.GetAllBidResponse:
+    properties:
+      Tenders:
+        $ref: '#/definitions/genprotos.GetTenderResponse'
+      comments:
+        type: string
+      created_at:
+        type: string
+      delivery_time:
+        description: in days
+        type: integer
+      price:
+        type: number
+      status:
+        description: '"pending", "awarded"'
+        type: string
+      tender_id:
+        type: string
+    type: object
+  genprotos.GetAllBidsByUser:
+    properties:
+      Tenders:
+        $ref: '#/definitions/genprotos.GetTenderResponse'
+      comments:
+        type: string
+      contractor_id:
+        type: string
+      delivery_time:
+        type: integer
+      price:
+        type: number
+    type: object
+  genprotos.GetAllBidsByUserIdRequest:
+    properties:
+      Binds:
+        items:
+          $ref: '#/definitions/genprotos.GetAllBidsByUser'
+        type: array
+    type: object
+  genprotos.GetTenderResponse:
+    properties:
+      budget:
+        type: number
+      client_id:
+        type: string
+      created_at:
+        type: string
+      deadline:
+        type: string
+      description:
+        type: string
+      file_url:
+        type: string
+      id:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+    type: object
+  genprotos.ListBidsResponse:
+    properties:
+      bids:
+        items:
+          $ref: '#/definitions/genprotos.GetAllBidResponse'
+        type: array
+    type: object
+  genprotos.ListTendersRequest:
+    properties:
+      deadline:
+        type: string
+      limit:
+        type: integer
+      offset:
+        type: integer
+      title:
+        type: string
+    type: object
+  genprotos.ListTendersResponse:
+    properties:
+      tenders:
+        items:
+          $ref: '#/definitions/genprotos.GetTenderResponse'
+        type: array
+    type: object
+  genprotos.SubmitBidRequest:
+    properties:
+      comments:
+        description: Optional
+        type: string
+      contractor_id:
+        type: string
+      delivery_time:
+        description: in days
+        type: integer
+      price:
+        type: number
+      tender_id:
+        type: string
+    type: object
+  genprotos.TenderResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  genprotos.UpdateTenderRequest:
+    properties:
+      budget:
+        type: number
+      deadline:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Dilshod's API Gateway
+  title: API Gateway
+  version: "1.0"
+paths:
+  /bid/contractor/{id}:
+    get:
+      consumes:
+      - application/json
+      description: List all bids placed by a specific contractor
+      parameters:
+      - description: Contractor ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Contractor's bids retrieved successfully
+          schema:
+            $ref: '#/definitions/genprotos.GetAllBidsByUserIdRequest'
+        "400":
+          description: Invalid input
+          schema:
+            type: string
+        "500":
+          description: Error while retrieving bids
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: List Contractor Bids
+      tags:
+      - Bid
+  /bid/list:
+    get:
+      consumes:
+      - application/json
+      description: List all bids with optional filtering by price, delivery time,
+        limit, and offset
+      parameters:
+      - description: Price filter
+        in: query
+        name: price
+        type: number
+      - description: Delivery time filter
+        in: query
+        name: delivery_time
+        type: integer
+      - description: Limit the number of bids
+        in: query
+        name: limit
+        type: integer
+      - description: Offset for pagination
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bids retrieved successfully
+          schema:
+            $ref: '#/definitions/genprotos.ListBidsResponse'
+        "400":
+          description: Invalid input
+          schema:
+            type: string
+        "500":
+          description: Error while retrieving bids
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: List Bids
+      tags:
+      - Bid
+  /bid/submit:
+    post:
+      consumes:
+      - application/json
+      description: Submit a bid for a tender
+      parameters:
+      - description: Bid details
+        in: body
+        name: bid
+        required: true
+        schema:
+          $ref: '#/definitions/genprotos.SubmitBidRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bid submitted successfully
+          schema:
+            $ref: '#/definitions/genprotos.BidResponse'
+        "400":
+          description: Invalid input
+          schema:
+            type: string
+        "500":
+          description: Error while submitting bid
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Submit Bid
+      tags:
+      - Bid
+  /bid/tender/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get all bids associated with a specific tender
+      parameters:
+      - description: Tender ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bids retrieved successfully
+          schema:
+            $ref: '#/definitions/genprotos.ListBidsResponse'
+        "400":
+          description: Invalid input
+          schema:
+            type: string
+        "500":
+          description: Error while retrieving bids
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get All Bids by Tender ID
+      tags:
+      - Bid
+  /tenders:
+    get:
+      consumes:
+      - application/json
+      description: List tenders with optional filtering by title and deadline
+      parameters:
+      - description: Filter and pagination parameters
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/genprotos.ListTendersRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of tenders
+          schema:
+            $ref: '#/definitions/genprotos.ListTendersResponse'
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: List tenders
+      tags:
+      - 04-Tender
+    post:
+      consumes:
+      - application/json
+      description: Create a new tender with the provided details
+      parameters:
+      - description: Tender details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/genprotos.CreateTenderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tender created successfully
+          schema:
+            $ref: '#/definitions/genprotos.TenderResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Create a new tender
+      tags:
+      - 04-Tender
+    put:
+      consumes:
+      - application/json
+      description: Update an existing tender with the provided details
+      parameters:
+      - description: Updated tender details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/genprotos.UpdateTenderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tender updated successfully
+          schema:
+            $ref: '#/definitions/genprotos.TenderResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "404":
+          description: Tender not found
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Update a tender
+      tags:
+      - 04-Tender
+  /tenders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a tender by its ID
+      parameters:
+      - description: Tender ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tender deleted successfully
+          schema:
+            $ref: '#/definitions/genprotos.TenderResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "404":
+          description: Tender not found
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Delete a tender
+      tags:
+      - 04-Tender
+  /tenders/award:
+    post:
+      consumes:
+      - application/json
+      description: Award a tender to a specific bid
+      parameters:
+      - description: Tender award details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/genprotos.CreatTenderAwardRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tender awarded successfully
+          schema:
+            $ref: '#/definitions/genprotos.TenderResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "404":
+          description: Tender or bid not found
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Award a tender
+      tags:
+      - 04-Tender
+  /tenders/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: List all tenders created by a specific user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of user tenders
+          schema:
+            $ref: '#/definitions/genprotos.ListTendersResponse'
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: List tenders for a specific user
+      tags:
+      - 04-Tender
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

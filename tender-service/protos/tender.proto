@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option go_package = "genprotos/";
+
+package protos;
+service TenderService {
+    rpc CreateTender (CreateTenderRequest) returns (TenderResponse);
+    rpc TenderAward (CreatTenderAwardRequest) returns (TenderResponse);
+    rpc DeleteTender (TenderIdRequest) returns (TenderResponse);
+    rpc ListTenders (ListTendersRequest) returns (ListTendersResponse);
+    rpc UpdateTender (UpdateTenderRequest) returns(TenderResponse);
+    rpc ListUserTenders(TenderIdRequest) returns (ListTendersResponse);
+}
+
+message CreateTenderRequest {
+    string title = 1;
+    string description = 2;
+    string deadline = 3; 
+    float budget = 4;
+    string file_url = 5;
+    string client_id=6; 
+}
+
+message CreatTenderAwardRequest {
+    string bid_id =1;
+    string tender_id =2;
+
+}
+
+message TenderResponse {
+    string message =1;
+}
+
+message TenderIdRequest {
+    string id = 1;
+}
+
+message GetTenderResponse {
+    string id = 1;
+    string client_id = 2;
+    string title = 3;
+    string description = 4;
+    string deadline = 5; 
+    float budget = 6;
+    string status = 7;
+    string file_url = 8;
+    string created_at = 9;
+}
+
+message UpdateTenderRequest{
+    string title = 1;
+    string description = 2;
+    string deadline = 3; 
+    float budget = 4;
+    string id =5;
+}
+
+message ListTendersRequest {
+    string title = 1;
+    string deadline = 2;
+    int32 limit = 3;
+    int32 offset = 4;
+}
+
+message ListTendersResponse {
+    repeated GetTenderResponse tenders = 1;
+}
